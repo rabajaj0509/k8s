@@ -1,0 +1,19 @@
+# taints restrict nodes from accepting pods.
+# kubectl taint nodes node1 app=frontend:NoSchedule
+
+# tolerations allow pods to be scheduled on tainted nodes
+# Add tolerations to the Pod definition file:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  conatiners:
+    - name: nginx-conatiner
+      image: nginx
+  tolerations:
+    - key: "app"
+      operator: "Equal"
+      value: "frontend"
+      effect: "NoSchedule"
