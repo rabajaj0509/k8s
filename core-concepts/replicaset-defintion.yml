@@ -1,3 +1,5 @@
+# To update the file use something like:
+#   kubectl scale -replicas=6 -f replicaset-definition.yml
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
