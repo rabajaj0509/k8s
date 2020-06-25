@@ -1,0 +1,19 @@
+
+i. To mark a node as unschedulable or
+corden a node, use the `drain` command.
+
+$ kubectl drain node-01
+
+ii. To mark a node unschedulable you can
+also use the `cordon` command. Unlike the
+`drain` comand, it does not terminate or move
+the pods on an existing node.
+
+$ kubectl cordon node-02
+
+iii. To schedule pods again on a restricted
+node, use the `uncordon` command.
+
+$ kubectl uncordon node-01
+
+
