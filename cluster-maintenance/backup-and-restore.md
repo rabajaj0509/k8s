@@ -1,0 +1,70 @@
+Backup ETCD:
+
+To create a backup of the ETCD
+
+```
+$ export ETCDCTL_API=3
+
+$ etcdctl member list \
+    --cacert=ca.crt \
+    --key=server.key \
+    -- endpoints=https://127.0.0.1:2379
+
+$ etcdctl snapshot save snapshot.db \
+    --cacert=ca.crt \
+    --key=server.key \
+    -- endpoints=https://127.0.0.1:2379
+
+$ etcdctl snapshot status snapshot.db
+    --cacert=ca.crt \
+    --key=server.key \
+    -- endpoints=https://127.0.0.1:2379
+```
+
+To restore the backup from the ETCD
+
+```
+$ service kube-apiserver stop
+$ etcdctl snapshot restore snapshot.db \
+    --data-dir /var/lib/etcd-from-backup \
+    --initial-cluster="master=https://127.0.0.1:2380" \
+    --name="master"
+    --inital-cluster-token="etcd-cluster-1" \
+    --initial-advertise-peer-urls https://127.0.0.1:2380
+    --cacert=ca.crt \
+    --key=server.key \
+    -- endpoints=https://127.0.0.1:2379
+```
+
+If everything is fine, a `member` folder can be found
+at the new data directory mentioned in the command.
+
+$ ls /var/lib/etcd-from-backup
+
+Next, we need to configure the ETCD configuration
+file to use the correct mount path, cluster-token
+and data directory
+
+$ vi /etc/kubernetes/manifests/etcd.service
+
+--initial-cluster-token etcd-cluster-1 (add this line to the file)
+--data-dir=/var/lib/etcd-from-backup
+
+volumeMounts:
+- mountPath: /var/lib/etcd-from-backup
+
+volumes:
+- hostPath:
+    path: /var/lib/etcd-from-backup
+
+
+Lastly, restart the etcd service
+
+$ etcdctl member list \
+    --cacert=ca.crt \
+    --key=server.key \
+    -- endpoints=https://127.0.0.1:2379
+
+$ systemctl daemon-reload
+$ service etcd restart
+$ service kube-apiserver start
