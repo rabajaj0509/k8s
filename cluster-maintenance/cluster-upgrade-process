@@ -1,0 +1,31 @@
+To upgrade the Kubernetes cluster, we must
+first upgrade the kubeadm tool itself.
+
+To know which new release is available for
+upgrade use the kubeadm tool.
+
+master$ kubeadm version
+master$ kubeadm upgrade plan
+
+Upgrade the master node:
+
+master$ kubectl drain master --ignore-deamonset
+master$ apt-get upgrade -y kubeadm=1.17.0-00
+master$ kubeadm upgrade apply v1.17.0
+
+Next step is to upgrade your kubelet:
+
+master$ apt-get install -y kubelet=1.17.0-00
+master$ systemctl restart kubelet
+master$ kubectl uncordon master
+
+Once, the master node is upgraded, we
+need to upgrade the worker nodes.
+
+master$ kubectl drain node-01 --ignore-deamonset
+master$ ssh node-01
+node-01$ kubeadm upgrade node
+node-01$ apt-get upgrade kubelet=1.17.0-00
+mode-01$ systemctl restart kubelet
+
+master$ kubectl uncordon node-01
