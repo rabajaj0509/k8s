@@ -1,0 +1,21 @@
+# Create a Certificate Signing Request to managed ny kubectl
+
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  name: new-user
+spec:
+  groups:
+    - system: authenticated
+  request: [base64 encode csr request]
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+# Commands to manage the certificates
+
+$ kubectl get csr
+$ kubectl certificate approve new-user
+$ kubectl certificate deny new-user
+$ kubectl get csr new-agent -o yaml
