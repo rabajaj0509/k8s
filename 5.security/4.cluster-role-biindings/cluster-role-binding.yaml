@@ -6,7 +6,7 @@ subjects:
   - kind: User
     name: cluster-admin
     apiGroup: rbac.authoirization.k8s.io
-  roleRef:
-    kind: ClusterRole
-    name: cluster-administrator
-    apiGroup: rbac.authoirization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-administrator
+  apiGroup: rbac.authoirization.k8s.io

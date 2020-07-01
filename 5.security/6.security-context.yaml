@@ -1,0 +1,35 @@
+-------------------
+# Pod level security context
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  securityContext:
+    runAsUser: 1000
+  conatainers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep", "3600"]
+-------------------
+
+-------------------
+# Container level security context
+# Note: Capabilities are only supported at the
+# container level and not at the POD level
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  conatainers:
+    - name: ubuntu
+      image: ubuntu
+      command: ["sleep", "3600"]
+      securityContext:
+        runAsUser: 1000
+        capabilities:
+          add: ["FEDORA_ADMIN"]
+-------------------
