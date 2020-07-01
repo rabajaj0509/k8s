@@ -2,6 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: devuser-developer-binding
+  namespace: blue # If you want the role-binding to exist in a particular namespace.
 subjects:
   - kind: User
     name: dev-user
