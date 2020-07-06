@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-wear
+spec:
+  rules:
+    - host: keycloak.journalctl.org
+      http:
+        paths:
+          - backend:
+              serviceName: keycloak-service
+              servicePort: 80
+    - host: blog.journalctl.org
+      http:
+        paths:
+          - backend:
+              serviceName: blog-service
+              servicePort: 80
